@@ -8,6 +8,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileType name="Pascal" language="Pascal" implementationClass="org.jetbrains.plugins.pascal.lang.PascalFileType" extensions="pas" fieldName="INSTANCE"/>
+        <lang.parserDefinition language="Pascal" implementationClass="org.jetbrains.plugins.pascal.lang.PascalParserDefinition"/>
 
     </extensions>
 </idea-plugin>
