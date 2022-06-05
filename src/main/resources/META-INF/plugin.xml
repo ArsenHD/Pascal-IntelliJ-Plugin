@@ -1,0 +1,13 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>org.jetbrains.plugins.pascal</id>
+    <name>Pascal</name>
+    <vendor>ArsenHD</vendor>
+
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="Pascal" language="Pascal" implementationClass="org.jetbrains.plugins.pascal.lang.PascalFileType" extensions="pas" fieldName="INSTANCE"/>
+
+    </extensions>
+</idea-plugin>
