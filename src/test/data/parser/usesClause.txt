@@ -24,10 +24,10 @@ FILE
       PsiElement(PascalTokenType.ID)('Unit3')
     PsiElement(PascalTokenType.SEMICOLON)(';')
   PsiWhiteSpace('\n\n')
-  PascalPsiElement(BLOCK)
-    PascalPsiElement(BLOCK_DECLARATION_PART)
+  PascalBlock(BLOCK)
+    PascalBlockDeclarationPart(BLOCK_DECLARATION_PART)
       <empty list>
-    PascalPsiElement(BLOCK_STATEMENT_PART)
+    PascalBlockStatementPart(BLOCK_STATEMENT_PART)
       PascalPsiElement(COMPOUND_STATEMENT)
         PsiElement(PascalTokenType.BEGIN)('begin')
         PsiWhiteSpace('\n')
