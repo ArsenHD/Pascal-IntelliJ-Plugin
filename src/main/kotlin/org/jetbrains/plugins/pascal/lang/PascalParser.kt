@@ -289,18 +289,7 @@ class PascalParser : PsiParser {
 
             if (expectAdvance(ID, "parameter name")) {
                 expectAdvance(COLON, "parameter type")
-                val parameterTypeMark = builder.mark()
-                if (at(ARRAY)) {
-                    assertAdvance(ARRAY)
-                    expectAdvance(OF, "'of'")
-                    parseType()
-                    parameterTypeMark.done(PascalElementType.ARRAY_PARAMETER_TYPE)
-                } else if (expectAdvance(ID, "type identifier")) {
-                    parameterTypeMark.done(PascalElementType.PARAMETER_TYPE)
-                } else {
-                    advance()
-                    parameterTypeMark.error("Parameter type expected")
-                }
+                parseType()
             }
 
             mark.done(PascalElementType.PARAMETER)
@@ -436,9 +425,12 @@ class PascalParser : PsiParser {
             val mark = builder.mark()
 
             when (currentToken) {
-                UNSIGNED_INT, UNSIGNED_FP_NUMBER -> {
+                UNSIGNED_INT -> {
                     advance()
-                    mark.done(PascalElementType.UNSIGNED_NUMBER)
+                    mark.done(PascalElementType.UNSIGNED_INT_NUMBER)
+                } UNSIGNED_FP_NUMBER -> {
+                    advance()
+                    mark.done(PascalElementType.UNSIGNED_FP_NUMBER)
                 }
                 STRING -> {
                     advance()
@@ -455,29 +447,32 @@ class PascalParser : PsiParser {
             if (at(ARRAY)) {
                 assertAdvance(ARRAY)
 
-                val dimensionsMark = builder.mark()
-                expectAdvance(LBRACKET, "'['")
+                if (at(LBRACKET)) {
+                    val dimensionsMark = builder.mark()
 
-                if (at(RBRACKET)) {
-                    assertAdvance(RBRACKET)
-                    dimensionsMark.error("Array types with zero dimensions are not allowed")
-                } else {
-                    while (true) {
-                        while (at(COMMA)) {
-                            errorAdvance("indices range")
+                    assertAdvance(LBRACKET)
+
+                    if (at(RBRACKET)) {
+                        assertAdvance(RBRACKET)
+                        dimensionsMark.error("Array types with zero dimensions are not allowed")
+                    } else {
+                        while (true) {
+                            while (at(COMMA)) {
+                                errorAdvance("indices range")
+                            }
+                            parseSubrangeType()
+                            if (at(RBRACKET)) {
+                                break
+                            }
+                            if (!expectAdvance(COMMA, "comma")) {
+                                break
+                            }
                         }
-                        parseSubrangeType()
-                        if (at(RBRACKET)) {
-                            break
-                        }
-                        if (!expectAdvance(COMMA, "comma")) {
-                            break
-                        }
+                        expectAdvance(RBRACKET, "']'")
                     }
-                    expectAdvance(RBRACKET, "']'")
-                }
 
-                dimensionsMark.done(PascalElementType.ARRAY_DIMENSIONS)
+                    dimensionsMark.done(PascalElementType.ARRAY_DIMENSIONS)
+                }
 
                 val markContentType = builder.mark()
                 expectAdvance(OF, "'of'")
@@ -545,7 +540,10 @@ class PascalParser : PsiParser {
         private fun tryParseAssignment(): Boolean {
             val mark = builder.mark()
             if (at(ID)) {
+                val variableReferenceMark = builder.mark()
                 assertAdvance(ID)
+                variableReferenceMark.done(PascalElementType.VARIABLE_REFERENCE)
+
                 if (at(ASSIGN)) {
                     assertAdvance(ASSIGN)
                     parseExpression()
@@ -595,9 +593,7 @@ class PascalParser : PsiParser {
         }
 
         private fun parseArgument() {
-            val mark = builder.mark()
             parseExpression()
-            mark.done(PascalElementType.ARGUMENT)
         }
 
         private fun parseIfStatement() {

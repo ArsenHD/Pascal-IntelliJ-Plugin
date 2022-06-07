@@ -25,9 +25,6 @@ class PascalElementType(@NonNls debugName: String) : IElementType(debugName, Pas
         val CONSTANT_DECLARATIONS = PascalElementType("CONSTANT_DECLARATIONS")
         val VARIABLE_DECLARATIONS = PascalElementType("VARIABLE_DECLARATIONS")
 
-        val FUNCTION_DECLARATIONS = PascalElementType("FUNCTION_DECLARATIONS")
-        val PROCEDURE_DECLARATIONS = PascalElementType("PROCEDURE_DECLARATIONS")
-
         val CONSTANT_DECLARATION = PascalElementType("CONSTANT_DECLARATION")
         val TYPED_CONSTANT_DECLARATION = PascalElementType("TYPED_CONSTANT_DECLARATION")
 
@@ -38,8 +35,6 @@ class PascalElementType(@NonNls debugName: String) : IElementType(debugName, Pas
 
         val PARAMETER_LIST = PascalElementType("PARAMETER_LIST")
         val PARAMETER = PascalElementType("PARAMETER")
-        val PARAMETER_TYPE = PascalElementType("PARAMETER_TYPE")
-        val ARRAY_PARAMETER_TYPE = PascalElementType("ARRAY_PARAMETER_TYPE")
 
         val BLOCK_STATEMENT_PART = PascalElementType("BLOCK_STATEMENT_PART")
 
@@ -70,23 +65,19 @@ class PascalElementType(@NonNls debugName: String) : IElementType(debugName, Pas
         val OPERATION_REFERENCE = PascalElementType("OPERATION_REFERENCE")
 
         val BINARY_EXPRESSION = PascalElementType("BINARY_EXPRESSION")
-        val SIMPLE_EXPRESSION = PascalElementType("SIMPLE_EXPRESSION")
-        val TERM = PascalElementType("TERM")
         val PREFIX_EXPRESSION = PascalElementType("PREFIX_EXPRESSION")
-        val FACTOR = PascalElementType("FACTOR")
         val PARENTHESIZED = PascalElementType("PARENTHESIZED")
 
         val VARIABLE_REFERENCE = PascalElementType("VARIABLE_REFERENCE")
         val CALL_EXPRESSION = PascalElementType("CALL_EXPRESSION")
         val TRUE_CONSTANT = PascalElementType("TRUE_CONSTANT")
         val FALSE_CONSTANT = PascalElementType("FALSE_CONSTANT")
-        val UNSIGNED_CONSTANT = PascalElementType("UNSIGNED_CONSTANT")
-        val UNSIGNED_NUMBER = PascalElementType("UNSIGNED_NUMBER")
+        val UNSIGNED_INT_NUMBER = PascalElementType("UNSIGNED_INT_NUMBER")
+        val UNSIGNED_FP_NUMBER = PascalElementType("UNSIGNED_FP_NUMBER")
         val CHARACTER_STRING = PascalElementType("CHARACTER_STRING")
         val NIL_REFERENCE = PascalElementType("NIL_REFERENCE")
 
         val ARGUMENT_LIST = PascalElementType("ARGUMENT_LIST")
-        val ARGUMENT = PascalElementType("ARGUMENT")
 
         // types
         val TYPE_REFERENCE = PascalElementType("TYPE_REFERENCE")
@@ -100,10 +91,10 @@ class PascalElementType(@NonNls debugName: String) : IElementType(debugName, Pas
 
 		val EXPRESSIONS = TokenSet.create(
             BINARY_EXPRESSION,
-            TERM,
-            FACTOR,
+            PREFIX_EXPRESSION,
             VARIABLE_REFERENCE, CALL_EXPRESSION,
-            TRUE_CONSTANT, FALSE_CONSTANT, UNSIGNED_CONSTANT, UNSIGNED_NUMBER,
+            TRUE_CONSTANT, FALSE_CONSTANT,
+            UNSIGNED_INT_NUMBER, UNSIGNED_FP_NUMBER,
             CHARACTER_STRING, NIL_REFERENCE
         )
 
@@ -117,54 +108,46 @@ class PascalElementType(@NonNls debugName: String) : IElementType(debugName, Pas
                 PROGRAM_HEADER -> PascalPsiElement(node)
                 USES_CLAUSE -> PascalPsiElement(node)
                 USES_CLAUSE_ENTRY -> PascalPsiElement(node)
-                BLOCK -> PascalPsiElement(node)
-                BLOCK_DECLARATION_PART -> PascalPsiElement(node)
+                BLOCK -> PascalBlock(node)
+                BLOCK_DECLARATION_PART -> PascalBlockDeclarationPart(node)
                 CONSTANT_DECLARATIONS -> PascalPsiElement(node)
-                VARIABLE_DECLARATIONS -> PascalPsiElement(node)
-                FUNCTION_DECLARATIONS -> PascalPsiElement(node)
-                PROCEDURE_DECLARATIONS -> PascalPsiElement(node)
+                VARIABLE_DECLARATIONS -> PascalVariableDeclarationPart(node)
                 CONSTANT_DECLARATION -> PascalPsiElement(node)
                 TYPED_CONSTANT_DECLARATION -> PascalPsiElement(node)
-                VARIABLE_DECLARATION -> PascalPsiElement(node)
-                FUNCTION_DECLARATION -> PascalPsiElement(node)
-                PROCEDURE_DECLARATION -> PascalPsiElement(node)
-                PARAMETER_LIST -> PascalPsiElement(node)
-                PARAMETER -> PascalPsiElement(node)
-                PARAMETER_TYPE -> PascalPsiElement(node)
-                ARRAY_PARAMETER_TYPE -> PascalPsiElement(node)
-                BLOCK_STATEMENT_PART -> PascalPsiElement(node)
+                VARIABLE_DECLARATION -> PascalVariableDeclaration(node)
+                FUNCTION_DECLARATION -> PascalFunction(node)
+                PROCEDURE_DECLARATION -> PascalProcedure(node)
+                PARAMETER_LIST -> PascalParameterList(node)
+                PARAMETER -> PascalParameter(node)
+                BLOCK_STATEMENT_PART -> PascalBlockStatementPart(node)
                 ASSIGNMENT -> PascalPsiElement(node)
                 COMPOUND_STATEMENT -> PascalPsiElement(node)
                 IF -> PascalPsiElement(node)
                 CONDITION -> PascalPsiElement(node)
                 THEN -> PascalPsiElement(node)
                 ELSE -> PascalPsiElement(node)
-                FOR_LOOP -> PascalPsiElement(node)
-                CONTROL_VARIABLE -> PascalPsiElement(node)
+                FOR_LOOP -> PascalForLoop(node)
+                CONTROL_VARIABLE -> PascalForLoopControlVariable(node)
                 LOOP_RANGE -> PascalPsiElement(node)
                 LOOP_BODY -> PascalPsiElement(node)
                 WHILE_LOOP -> PascalPsiElement(node)
                 REPEAT_UNTIL -> PascalPsiElement(node)
                 OPERATION_REFERENCE -> PascalPsiElement(node)
-                BINARY_EXPRESSION -> PascalPsiElement(node)
-                SIMPLE_EXPRESSION -> PascalPsiElement(node)
-                TERM -> PascalPsiElement(node)
-                PREFIX_EXPRESSION -> PascalPsiElement(node)
-                FACTOR -> PascalPsiElement(node)
+                BINARY_EXPRESSION -> PascalBinaryExpression(node)
+                PREFIX_EXPRESSION -> PascalPrefixExpression(node)
                 PARENTHESIZED -> PascalPsiElement(node)
-                VARIABLE_REFERENCE -> PascalPsiElement(node)
-                CALL_EXPRESSION -> PascalPsiElement(node)
-                TRUE_CONSTANT -> PascalPsiElement(node)
-                FALSE_CONSTANT -> PascalPsiElement(node)
-                UNSIGNED_CONSTANT -> PascalPsiElement(node)
-                UNSIGNED_NUMBER -> PascalPsiElement(node)
-                CHARACTER_STRING -> PascalPsiElement(node)
-                NIL_REFERENCE -> PascalPsiElement(node)
-                ARGUMENT_LIST -> PascalPsiElement(node)
-                ARGUMENT -> PascalPsiElement(node)
-                TYPE_REFERENCE -> PascalPsiElement(node)
-                SUBRANGE_TYPE -> PascalPsiElement(node)
-                ARRAY_DIMENSIONS -> PascalPsiElement(node)
+                VARIABLE_REFERENCE -> PascalVariableAccess(node)
+                CALL_EXPRESSION -> PascalCallExpression(node)
+                TRUE_CONSTANT -> PascalTrueConstant(node)
+                FALSE_CONSTANT -> PascalFalseConstant(node)
+                UNSIGNED_INT_NUMBER -> PascalUnsignedIntNumber(node)
+                UNSIGNED_FP_NUMBER -> PascalUnsignedFloatNumber(node)
+                CHARACTER_STRING -> PascalCharacterString(node)
+                NIL_REFERENCE -> PascalNilReference(node)
+                ARGUMENT_LIST -> PascalArgumentList(node)
+                TYPE_REFERENCE -> PascalTypeRef(node)
+                SUBRANGE_TYPE -> PascalSubrangeType(node)
+                ARRAY_DIMENSIONS -> PascalArrayDimensions(node)
                 ARRAY_CONTENT_TYPE -> PascalPsiElement(node)
                 GARBAGE_AT_THE_END_OF_FILE -> PascalPsiElement(node)
                 else -> throw IllegalArgumentException("Unknown elementType: " + node.elementType)
